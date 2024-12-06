@@ -1,0 +1,27 @@
+{
+	"name": "PagePort",
+	"version": "1.1.0",
+	"author": [
+		"WikiWorks team",
+		"Daniel Scherzer"
+	],
+	"url": "https://github.com/WikiTeq/PagePort#readme",
+	"descriptionmsg": "pageport-desc",
+	"license-name": "MIT",
+	"requires": {
+		"MediaWiki": ">= 1.39.0"
+	},
+	"type": "other",
+	"AutoloadClasses": {
+		"PagePort": "includes/PagePort.php"
+	},
+	"MessagesDirs": {
+		"PagePort": [
+			"i18n"
+		]
+	},
+	"ServiceWiringFiles": [
+		"includes/ServiceWiring.php"
+	],
+	"manifest_version": 2
+}
