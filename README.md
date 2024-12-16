@@ -1,9 +1,9 @@
 PagePort
 ----------
 
-[![CI](https://github.com/WikiTeq/PagePort/actions/workflows/mediawiki.yml/badge.svg)](https://github.com/WikiTeq/PagePort/actions/workflows/mediawiki.yml)
-
 The extension provides a maintenance script to export and import wiki pages in a git-book format and JSON format:
+
+See also the [full documentation on mediawiki.org](https://www.mediawiki.org/wiki/Extension:PagePort).
 
 ```
 /
@@ -48,8 +48,8 @@ The extension provides a maintenance script to export and import wiki pages in a
 
 # Requirements:
 
-* MediaWiki 1.30+
-* php-zip extension (optional)
+* MediaWiki 1.39+
+* php-zip extension
 
 # Exporting pages
 
@@ -101,4 +101,4 @@ See `php maintenance/importPages.php --help` for details
 
 # Contribution
 
-TODO
+Contribute through Wikimedia's Gerrit instance.  The usual [Code of Conduct](https://www.mediawiki.org/wiki/Special:MyLanguage/Code_of_Conduct) applies here.

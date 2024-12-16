@@ -37,7 +37,16 @@ class PagePortImportPagesMaintenance extends Maintenance {
 		}
 
 		$root = $this->getOption( 'source' );
-		$user = $this->getOption( 'user', null );
+		$username = $this->getOption( 'user', null );
+
+		$user = null;
+		if ( $username !== null ) {
+			$user = User::newFromName( $username );
+		}
+		if ( $user === null || $user === false ) {
+			$user = User::newSystemUser( User::MAINTENANCE_SCRIPT_USER, [ 'steal' => true ] );
+		}
+
 		$r = PagePort::getInstance()->import( $root, $user );
 		foreach ( $r as $p ) {
 			$this->output( $p['name'] . "\n" );

@@ -13,6 +13,8 @@ class PagePortTest extends MediaWikiIntegrationTestCase {
 	/** @var PagePort */
 	private $pp;
 
+	private User $user;
+
 	private WikiPageFactory $wikiPageFactory;
 
 	public static function setupBeforeClass(): void {
@@ -61,6 +63,7 @@ class PagePortTest extends MediaWikiIntegrationTestCase {
 		);
 		$this->pp = PagePort::getInstance();
 		$this->wikiPageFactory = $this->getServiceContainer()->getWikiPageFactory();
+		$this->user = $this->getTestUser( 'sysop' )->getUser();
 	}
 
 	/**
@@ -334,9 +337,9 @@ class PagePortTest extends MediaWikiIntegrationTestCase {
 		foreach ( $pages as $page ) {
 			$title = Title::newFromText( $page );
 			$wp = $this->wikiPageFactory->newFromTitle( $title );
-			$wp->doDeleteArticleReal( 'test', $this->getTestUser( 'sysop' )->getUser(), true );
+			$wp->doDeleteArticleReal( 'test', $this->user, true );
 		}
-		$this->pp->import( $tempDir );
+		$this->pp->import( $tempDir, $this->user );
 		foreach ( $pages as $page ) {
 			$title = Title::newFromText( $page );
 			$this->assertTrue( $title->exists() );
@@ -401,7 +404,7 @@ class PagePortTest extends MediaWikiIntegrationTestCase {
 		foreach ( $pages as $p ) {
 			$this->assertContains( $p, $allPages, "Page $p is included in getAllPages()" );
 		}
-		$this->pp->delete( $tempDir );
+		$this->pp->delete( $tempDir, $this->user );
 		$allPages = $this->pp->getAllPages();
 		foreach ( $pages as $p ) {
 			$this->assertNotContains( $p, $allPages, "Page $p was deleted" );

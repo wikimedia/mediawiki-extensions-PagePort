@@ -2,6 +2,7 @@
 
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Page\WikiPageFactory;
+use MediaWiki\User\UserIdentity;
 use Wikimedia\Rdbms\ILoadBalancer;
 
 class PagePort {
@@ -37,16 +38,12 @@ class PagePort {
 
 	/**
 	 * @param string $root
-	 * @param string|null $user
+	 * @param UserIdentity|null $user
 	 *
 	 * @return array
 	 */
-	public function import( string $root, ?string $user = null ): array {
-		if ( $user !== null ) {
-			$user = User::newFromName( $user );
-		} else {
-			$user = RequestContext::getMain()->getUser();
-		}
+	public function import( string $root, ?UserIdentity $user = null ): array {
+		$user ??= RequestContext::getMain()->getUser();
 		$pages = $this->getPages( $root );
 		foreach ( $pages as $page ) {
 			$title = Title::newFromText( $page['fulltitle'] );
@@ -62,16 +59,12 @@ class PagePort {
 
 	/**
 	 * @param string $root
-	 * @param string|null $user
+	 * @param UserIdentity|null $user
 	 *
 	 * @return array
 	 */
-	public function delete( string $root, ?string $user = null ): array {
-		if ( $user !== null ) {
-			$user = User::newFromName( $user );
-		} else {
-			$user = RequestContext::getMain()->getUser();
-		}
+	public function delete( string $root, ?UserIdentity $user = null ): array {
+		$user ??= RequestContext::getMain()->getUser();
 		$pages = $this->getPages( $root );
 		foreach ( $pages as $page ) {
 			$title = Title::newFromText( $page['fulltitle'] );
@@ -294,9 +287,12 @@ class PagePort {
 		}
 		$defines = get_defined_constants( true );
 		$constants = array_filter(
+			// Phan thinks this variable could be null, but in practice MEDIAWIKI
+			// and NS_MAIN are always defined
+			// @phan-suppress-next-line PhanTypeMismatchArgumentNullableInternal
 			$defines['user'],
 			static function ( $k ) {
-				return strpos( $k, 'NS_' ) !== false;
+				return strpos( $k, 'NS_' ) === 0;
 			},
 			ARRAY_FILTER_USE_KEY
 		);
