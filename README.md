@@ -97,7 +97,7 @@ php maintenance/exportPages.php --category Test --out ~/export/test.json --json 
     / --version 1.0 --package "MyPackage" --desc "My description"
 ```
 
-See `php maintenance/importPages.php --help` for details
+See `php maintenance/exportPages.php --help` for details
 
 # Contribution
 
