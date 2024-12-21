@@ -287,9 +287,6 @@ class PagePort {
 		}
 		$defines = get_defined_constants( true );
 		$constants = array_filter(
-			// Phan thinks this variable could be null, but in practice MEDIAWIKI
-			// and NS_MAIN are always defined
-			// @phan-suppress-next-line PhanTypeMismatchArgumentNullableInternal
 			$defines['user'],
 			static function ( $k ) {
 				return strpos( $k, 'NS_' ) === 0;
