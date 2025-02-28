@@ -49,7 +49,7 @@ class PagePortImportPagesMaintenance extends Maintenance {
 
 		$r = PagePort::getInstance()->import( $root, $user );
 		foreach ( $r as $p ) {
-			$this->output( $p['name'] . "\n" );
+			$this->output( $p['fulltitle'] . "\n" );
 		}
 
 		$this->output( "Done!\n" );

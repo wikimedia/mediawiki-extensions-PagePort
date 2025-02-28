@@ -49,7 +49,7 @@ class PagePortDeletePagesMaintenance extends Maintenance {
 
 		$r = PagePort::getInstance()->delete( $root, $user );
 		foreach ( $r as $p ) {
-			$this->output( $p['name'] . "\n" );
+			$this->output( $p['fulltitle'] . "\n" );
 		}
 
 		$this->output( "Done!\n" );
