@@ -2,6 +2,7 @@
 
 use JsonSchema\Validator;
 use MediaWiki\Page\WikiPageFactory;
+use MediaWiki\Title\Title;
 
 /**
  * @coversDefaultClass PagePort

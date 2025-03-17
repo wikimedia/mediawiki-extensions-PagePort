@@ -48,7 +48,7 @@ See also the [full documentation on mediawiki.org](https://www.mediawiki.org/wik
 
 # Requirements:
 
-* MediaWiki 1.39+
+* MediaWiki 1.39.4+
 * php-zip extension
 
 # Exporting pages
