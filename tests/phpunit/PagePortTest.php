@@ -1,6 +1,7 @@
 <?php
 
 use JsonSchema\Validator;
+use MediaWiki\MainConfigNames;
 use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Title\Title;
 
@@ -29,17 +30,15 @@ class PagePortTest extends MediaWikiIntegrationTestCase {
 	public function setup(): void {
 		parent::setup();
 
-		$this->setMwGlobals(
-			[
-				'wgExtraNamespaces' => [
-					NS_CUSTOM => "CustomNamespace",
-					NS_CUSTOM_TALK => "CustomNamespace_talk",
-					NS_CUSTOM_SLASH => "CustomNamespace/With/Slashes",
-					NS_CUSTOM_SLASH_TALK => "CustomNamespace/With/Slashes_talk",
-				],
-				'wgMetaNamespace' => 'RandomMetaName'
-			]
-		);
+		$this->overrideConfigValues( [
+			MainConfigNames::ExtraNamespaces => [
+				NS_CUSTOM => "CustomNamespace",
+				NS_CUSTOM_TALK => "CustomNamespace_talk",
+				NS_CUSTOM_SLASH => "CustomNamespace/With/Slashes",
+				NS_CUSTOM_SLASH_TALK => "CustomNamespace/With/Slashes_talk",
+			],
+			MainConfigNames::MetaNamespace => 'RandomMetaName',
+		] );
 
 		$this->insertPage( 'Page1Test', 'Page1TestContents' );
 		$this->insertPage( 'Page2Test', 'Page2TestContents ===Header===' );
