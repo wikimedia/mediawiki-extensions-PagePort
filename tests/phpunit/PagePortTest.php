@@ -284,7 +284,7 @@ class PagePortTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
-	 * @covers       PagePort::getNamespaceName
+	 * @covers PagePort::getNamespaceName
 	 * @dataProvider namespaceNames
 	 */
 	public function testGetNamespaceName( $input, $expected ): void {
@@ -304,7 +304,7 @@ class PagePortTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
-	 * @covers       PagePort::getNamespaceByValue
+	 * @covers PagePort::getNamespaceByValue
 	 * @dataProvider namespaceValues
 	 */
 	public function testGetNamespaceByValue( $input, $expected ) {

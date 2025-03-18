@@ -544,11 +544,11 @@ class PagePort {
 		} else {
 			$spaceRepresentation = $replaceSpaces ? '_' : ' ';
 			return $column_value . $db->buildLike( $substring, $db->anyString() ) . ' OR ' . $column_value .
-				   $db->buildLike(
-					   $db->anyString(),
-					   $spaceRepresentation . $substring,
-					   $db->anyString()
-				   );
+				$db->buildLike(
+					$db->anyString(),
+					$spaceRepresentation . $substring,
+					$db->anyString()
+				);
 		}
 	}
 

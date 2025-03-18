@@ -1,8 +1,8 @@
 <?php
 
-$maintPath = ( getenv( 'MW_INSTALL_PATH' ) !== false ? getenv( 'MW_INSTALL_PATH' ) .
-													   '/maintenance' : __DIR__ .
-																		'/../../../maintenance' );
+$maintPath = getenv( 'MW_INSTALL_PATH' ) !== false ?
+	getenv( 'MW_INSTALL_PATH' ) . '/maintenance' :
+	__DIR__ . '/../../../maintenance';
 
 require_once $maintPath . '/Maintenance.php';
 
