@@ -1,12 +1,20 @@
 <?php
 
+namespace MediaWiki\Extension\PagePort;
+
+use InvalidArgumentException;
+use MediaWiki\Content\ContentHandler;
+use MediaWiki\Context\RequestContext;
 use MediaWiki\Html\TemplateParser;
+use MediaWiki\Language\Language;
 use MediaWiki\Linker\LinksMigration;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Page\WikiPageFactory;
+use MediaWiki\Title\NamespaceInfo;
 use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleValue;
 use MediaWiki\User\UserIdentity;
+use UnexpectedValueException;
 use Wikimedia\Rdbms\ILoadBalancer;
 
 class PagePort {

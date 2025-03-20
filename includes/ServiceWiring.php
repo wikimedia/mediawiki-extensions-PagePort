@@ -1,11 +1,14 @@
 <?php
 
+namespace MediaWiki\Extension\PagePort;
+
 use MediaWiki\MediaWikiServices;
 
 /**
  * Service wiring for PagePort
  * @codeCoverageIgnore
  */
+/** @phpcs-require-sorted-array */
 return [
 	'PagePort' => static function ( MediaWikiServices $services ): PagePort {
 		$categoryLinkMigrationStage = MIGRATION_OLD;

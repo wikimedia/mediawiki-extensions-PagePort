@@ -9,11 +9,11 @@
 	"descriptionmsg": "pageport-desc",
 	"license-name": "MIT",
 	"requires": {
-		"MediaWiki": ">= 1.42"
+		"MediaWiki": ">= 1.43"
 	},
 	"type": "other",
-	"AutoloadClasses": {
-		"PagePort": "includes/PagePort.php"
+	"AutoloadNamespaces": {
+		"MediaWiki\\Extension\\PagePort\\": "includes/"
 	},
 	"MessagesDirs": {
 		"PagePort": [

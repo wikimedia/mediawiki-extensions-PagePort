@@ -1,12 +1,13 @@
 <?php
 
 use JsonSchema\Validator;
+use MediaWiki\Extension\PagePort\PagePort;
 use MediaWiki\MainConfigNames;
 use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Title\Title;
 
 /**
- * @coversDefaultClass PagePort
+ * @coversDefaultClass \MediaWiki\Extension\PagePort\PagePort
  * @group Database
  * @group extension-PagePort
  */
@@ -67,7 +68,7 @@ class PagePortTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
-	 * @covers PagePort::getAllPagesForCategory
+	 * @covers \MediaWiki\Extension\PagePort\PagePort::getAllPagesForCategory
 	 */
 	public function testExportCategories(): void {
 		$pages = $this->pp->getAllPagesForCategory( 'TestRootCategory', 1, null, true );
@@ -85,7 +86,7 @@ class PagePortTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
-	 * @covers PagePort::export
+	 * @covers \MediaWiki\Extension\PagePort\PagePort::export
 	 */
 	public function testExportPages(): void {
 		$pages = [
@@ -175,7 +176,7 @@ class PagePortTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
-	 * @covers PagePort::export
+	 * @covers \MediaWiki\Extension\PagePort\PagePort::export
 	 */
 	public function testExportMissing(): void {
 		$pageName = 'PageThatDoesNotExist';
@@ -190,7 +191,7 @@ class PagePortTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
-	 * @covers PagePort::exportJSON
+	 * @covers \MediaWiki\Extension\PagePort\PagePort::exportJSON
 	 */
 	public function testExportPagesJSON(): void {
 		$pages = [
@@ -296,7 +297,7 @@ class PagePortTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
-	 * @covers PagePort::getNamespaceName
+	 * @covers \MediaWiki\Extension\PagePort\PagePort::getNamespaceName
 	 * @dataProvider namespaceNames
 	 */
 	public function testGetNamespaceName( $input, $expected ): void {
@@ -316,7 +317,7 @@ class PagePortTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
-	 * @covers PagePort::getNamespaceByValue
+	 * @covers \MediaWiki\Extension\PagePort\PagePort::getNamespaceByValue
 	 * @dataProvider namespaceValues
 	 */
 	public function testGetNamespaceByValue( $input, $expected ) {
@@ -324,8 +325,8 @@ class PagePortTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
-	 * @covers PagePort::import
-	 * @covers PagePort::getAllPages
+	 * @covers \MediaWiki\Extension\PagePort\PagePort::import
+	 * @covers \MediaWiki\Extension\PagePort\PagePort::getAllPages
 	 * @dataProvider provideTestImport
 	 */
 	public function testImport( ?callable $callback = null ) {
@@ -393,7 +394,7 @@ class PagePortTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
-	 * @covers PagePort::delete
+	 * @covers \MediaWiki\Extension\PagePort\PagePort::delete
 	 */
 	public function testDelete() {
 		$tempDir = $this->tempdir( 'pageprot_' );

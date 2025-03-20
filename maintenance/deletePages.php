@@ -6,6 +6,8 @@ $maintPath = getenv( 'MW_INSTALL_PATH' ) !== false ?
 
 require_once $maintPath . '/Maintenance.php';
 
+use MediaWiki\Extension\PagePort\PagePort;
+
 // @codingStandardsIgnoreStart
 class PagePortDeletePagesMaintenance extends Maintenance {
 // @codingStandardsIgnoreEnd
