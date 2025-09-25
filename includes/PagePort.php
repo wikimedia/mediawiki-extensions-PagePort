@@ -1,5 +1,6 @@
 <?php
 
+use MediaWiki\Html\TemplateParser;
 use MediaWiki\Linker\LinksMigration;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Page\WikiPageFactory;
@@ -28,6 +29,7 @@ class PagePort {
 	private ILoadBalancer $loadBalancer;
 	private NamespaceInfo $namespaceInfo;
 	private WikiPageFactory $wikiPageFactory;
+	private TemplateParser $templateParser;
 
 	public function __construct(
 		int $categoryLinkMigrationStage,
@@ -43,6 +45,7 @@ class PagePort {
 		$this->loadBalancer = $loadBalancer;
 		$this->namespaceInfo = $namespaceInfo;
 		$this->wikiPageFactory = $wikiPageFactory;
+		$this->templateParser = new TemplateParser( __DIR__ . '/../templates' );
 	}
 
 	/**
@@ -312,9 +315,8 @@ class PagePort {
 	 * @param string $root Output directory
 	 * @param string|null $packageName Package name
 	 * @param string $packageDesc Package desc
-	 *
 	 * @param string|null $repo GitHub repository name to substitute wiki URLs
-	 *
+	 * @param bool $readme Whether to generate a README file
 	 * @param string|null $version Version
 	 * @param string|null $author Author
 	 * @param string|null $publisher Publisher
@@ -331,6 +333,7 @@ class PagePort {
 		?string $packageName = null,
 		string $packageDesc = '',
 		?string $repo = null,
+		bool $readme = false,
 		?string $version = null,
 		?string $author = null,
 		?string $publisher = null,
@@ -363,6 +366,8 @@ class PagePort {
 				]
 			]
 		];
+		$requiredExtensions = [];
+		$requiredPackages = [];
 		$jsonPages = [];
 		foreach ( $pages as $page ) {
 			$title = Title::newFromText( $page );
@@ -396,17 +401,37 @@ class PagePort {
 		if ( is_array( $dependencies ) ) {
 			foreach ( $dependencies as $dependency ) {
 				$json['packages'][$packageName]['requiredPackages'][] = $dependency;
+				$requiredPackages[] = $dependency;
 			}
 		}
 		if ( is_array( $extensions ) ) {
 			foreach ( $extensions as $extension ) {
 				$json['packages'][$packageName]['requiredExtensions'][] = $extension;
+				$requiredExtensions[] = $extension;
 			}
 		}
 		if ( !$save ) {
 			return [ $filename, json_encode( $json, JSON_PRETTY_PRINT ) ];
 		}
 		file_put_contents( $filename, json_encode( $json, JSON_PRETTY_PRINT ) );
+		if ( $repo && $readme ) {
+			$readmeContents = $this->templateParser->processTemplate( 'readme', [
+				'publisher' => $json['publisher'],
+				'author' => $json['author'],
+				'language' => $json['language'],
+				'repo' => $repo,
+				'repoUrl' => $json['url'],
+				'repoName' => explode( '/', $repo )[1],
+				'packageName' => $packageName,
+				'description' => $packageDesc,
+				'version' => $version,
+				'packageID' => str_replace( ' ', '.', $packageName ),
+				'requiredPackages' => $requiredPackages,
+				'requiredExtensions' => $requiredExtensions,
+				'filename' => basename( $filename )
+			] );
+			file_put_contents( dirname( $filename ) . '/README.md', $readmeContents );
+		}
 		return true;
 	}
 

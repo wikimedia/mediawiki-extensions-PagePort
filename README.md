@@ -89,6 +89,9 @@ php maintenance/exportPages.php --category Test --out ~/export/test.json --json
 # Rewrite pages URLs to point them to a GitHub repository at "someone/Repo":
 php maintenance/exportPages.php --category Test --out ~/export/test.json --json --github "someone/Repo"
 
+# Also create a default README.md file in the target directory:
+php maintenance/exportPages.php --category Test --out ~/export/test.json --json --github "someone/Repo" --readme
+
 # You can also omit the filename, in that case filename will be generated based on time():
 php maintenance/exportPages.php --category Test --out ~/export/ --json
 

@@ -216,6 +216,7 @@ class PagePortTest extends MediaWikiIntegrationTestCase {
 			"testPackage",
 			"testDesc",
 			"testRepo",
+			false,
 			"testVersion",
 			"testAuthor",
 			"testPublisher",

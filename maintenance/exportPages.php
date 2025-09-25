@@ -30,6 +30,7 @@ class PagePortExportMaintenance extends Maintenance {
 		$this->addOption( 'package', 'package name (JSON only)', false, true, 'p' );
 		$this->addOption( 'desc', 'package description (JSON only)', false, true, 'd' );
 		$this->addOption( 'github', 'github repository name to use in JSON export urls', false, true, 'g' );
+		$this->addOption( 'readme', 'generate default README.md file', false, false, 'r' );
 		$this->addOption( 'version', 'JSON package version', false, true, 'v' );
 		$this->addOption( 'author', 'JSON package author', false, true, 'a' );
 		$this->addOption( 'publisher', 'JSON package publisher', false, true, 'u' );
@@ -79,6 +80,7 @@ class PagePortExportMaintenance extends Maintenance {
 		$package = $this->getOption( 'package', null );
 		$desc = $this->getOption( 'desc', '' );
 		$github = $this->getOption( 'github' );
+		$readme = $this->getOption( 'readme', false );
 		$version = $this->getOption( 'version' );
 		$author = $this->getOption( 'author' );
 		$publisher = $this->getOption( 'publisher' );
@@ -120,6 +122,7 @@ class PagePortExportMaintenance extends Maintenance {
 						$package,
 						$desc,
 						$github,
+						$readme,
 						$version,
 						$author,
 						$publisher,

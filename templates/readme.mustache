@@ -1,0 +1,58 @@
+# {{ packageName }} {{# version }}, v{{ . }}{{/ version }}
+{{# description }}
+{{ . }}
+{{/ description }}
+* Publisher: {{ publisher }}
+* Author: {{ author }}
+
+# Required extensions
+{{# requiredExtensions }}
+* {{ . }}
+{{/ requiredExtensions}}
+{{^ requiredExtensions }}
+* None
+{{/ requiredExtensions}}
+
+# Required packages
+{{# requiredPackages }}
+* {{ . }}
+{{/ requiredPackages}}
+{{^ requiredPackages }}
+* None
+{{/ requiredPackages}}
+
+# Setup
+
+## via PagePort
+
+* Install and enable PagePort as described in [https://github.com/WikiTeq/PagePort](documentation).
+* Download package repository:
+```bash
+git clone {{ repoUrl }} ~/{{ repoName }}
+```
+* Navigate to your MediaWiki installation directory (mind its actual path):
+```bash
+cd /var/www/mediawiki
+```
+* Import pages to their respective namespaces:
+```bash
+php extensions/PagePort/maintenance/importPages.php --source ~/{{ repoName }}
+```
+
+## via PageExchange
+
+* Install and enable PageExchange as described in [https://www.mediawiki.org/wiki/Extension:Page_Exchange](documentation).
+* Add the following to the bottom of your `LocalSettings.php`:
+```
+$wgPageExchangePackageFiles[] = 'https://raw.githubusercontent.com/{{ repo }}/refs/heads/master/{{ filename }}';
+```
+* Navigate to `Special:Packages` and install the package
+
+You can speed up pages creation by forcing job queue processing (optional) by running:
+```bash
+php maintenance/run.php runJobs
+```
+or for older MediaWiki versions (<=1.39):
+```bash
+php maintenance/runJobs.php
+```
