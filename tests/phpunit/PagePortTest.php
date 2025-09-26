@@ -270,6 +270,17 @@ class PagePortTest extends MediaWikiIntegrationTestCase {
 			'https://raw.githubusercontent.com/testRepo/master/Project%2FPage10Test.mediawiki',
 			$json['packages']['testPackage']['pages'][12]['url']
 		);
+		// Suffix for non-wikitext pages
+		$this->assertEquals(
+			'https://raw.githubusercontent.com/testRepo/master/MediaWiki%2FCommon.css',
+			$json['packages']['testPackage']['pages'][13]['url'],
+			'no .mediawiki for CSS files'
+		);
+		$this->assertEquals(
+			'https://raw.githubusercontent.com/testRepo/master/MediaWiki%2FExample.js',
+			$json['packages']['testPackage']['pages'][14]['url'],
+			'no .mediawiki for JS files'
+		);
 	}
 
 	public function namespaceNames(): array {

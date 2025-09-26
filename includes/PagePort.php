@@ -1,8 +1,10 @@
 <?php
 
+use MediaWiki\Linker\LinksMigration;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Title\Title;
+use MediaWiki\Title\TitleValue;
 use MediaWiki\User\UserIdentity;
 use Wikimedia\Rdbms\ILoadBalancer;
 
@@ -20,17 +22,23 @@ class PagePort {
 		return MediaWikiServices::getInstance()->getService( 'PagePort' );
 	}
 
+	private int $categoryLinkMigrationStage;
+	private LinksMigration $linksMigration;
 	private Language $contentLanguage;
 	private ILoadBalancer $loadBalancer;
 	private NamespaceInfo $namespaceInfo;
 	private WikiPageFactory $wikiPageFactory;
 
 	public function __construct(
+		int $categoryLinkMigrationStage,
+		LinksMigration $linksMigration,
 		Language $contentLanguage,
 		ILoadBalancer $loadBalancer,
 		NamespaceInfo $namespaceInfo,
 		WikiPageFactory $wikiPageFactory
 	) {
+		$this->categoryLinkMigrationStage = $categoryLinkMigrationStage;
+		$this->linksMigration = $linksMigration;
 		$this->contentLanguage = $contentLanguage;
 		$this->loadBalancer = $loadBalancer;
 		$this->namespaceInfo = $namespaceInfo;
@@ -371,11 +379,15 @@ class PagePort {
 				"url" => $title->getFullURL( 'action=raw' )
 			];
 			if ( $repo !== null ) {
+				$suffix = '';
+				if ( $title->hasContentModel( CONTENT_MODEL_WIKITEXT ) ) {
+					$suffix = '.mediawiki';
+				}
 				$item['url'] =
 					"https://raw.githubusercontent.com/{$repo}/master/" .
 					rawurlencode(
 						"{$this->getNamespaceName( $title->getNamespace() )}"
-						. "/" . "{$escapedName}.mediawiki"
+						. "/" . "{$escapedName}{$suffix}"
 					);
 			}
 			$jsonPages[] = $item;
@@ -430,9 +442,15 @@ class PagePort {
 				$tables = [ 'categorylinks', 'page' ];
 				$columns = [ 'page_title', 'page_namespace' ];
 				$conditions = [];
+				if ( $this->shouldReadNewSchema() ) {
+					$conditions = $this->linksMigration->getLinksConditions(
+						'categorylinks',
+						new TitleValue( NS_CATEGORY, $category )
+					);
+				} else {
+					$conditions['cl_to'] = $category;
+				}
 				$conditions[] = 'cl_from = page_id';
-				$conditions['cl_to'] = $category;
-
 				$join = [];
 				if ( $substring != null ) {
 					$conditions[] = $this->getSQLConditionForAutocompleteInColumn(
@@ -573,6 +591,32 @@ class PagePort {
 			$newPages[$fixedKey] = $value;
 		}
 		return $newPages;
+	}
+
+	/**
+	 * Whether to read the new categorylinks schema, which has deduplication
+	 * via linktarget, or the old schema, which doesn't.
+	 *
+	 * PagePort does *not* support reading new with a fallback to the old schema,
+	 * so don't try and use PagePort while update.php is running.
+	 *
+	 * @return bool
+	 */
+	private function shouldReadNewSchema(): bool {
+		if ( !array_key_exists( 'categorylinks', LinksMigration::$mapping ) ) {
+			// Migration logic doesn't exist yet, i.e. MW 1.39-1.43
+			return false;
+		}
+		$stage = $this->categoryLinkMigrationStage;
+		$read = $stage & SCHEMA_COMPAT_READ_MASK;
+		if ( $read === SCHEMA_COMPAT_READ_OLD ) {
+			return false;
+		} elseif ( $read === SCHEMA_COMPAT_READ_NEW ) {
+			return true;
+		}
+		throw new UnexpectedValueException(
+			"Category link migration stage has multiple read options: $stage"
+		);
 	}
 
 }
