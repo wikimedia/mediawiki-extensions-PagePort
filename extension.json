@@ -9,7 +9,7 @@
 	"descriptionmsg": "pageport-desc",
 	"license-name": "MIT",
 	"requires": {
-		"MediaWiki": ">= 1.39.4"
+		"MediaWiki": ">= 1.42"
 	},
 	"type": "other",
 	"AutoloadClasses": {

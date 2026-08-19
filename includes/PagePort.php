@@ -17,34 +17,22 @@ class PagePort {
 	private static $constantsCache = [];
 
 	/**
-	 * @return PagePort
+	 * @return self
 	 */
-	public static function getInstance(): PagePort {
+	public static function getInstance(): self {
 		return MediaWikiServices::getInstance()->getService( 'PagePort' );
 	}
 
-	private int $categoryLinkMigrationStage;
-	private LinksMigration $linksMigration;
-	private Language $contentLanguage;
-	private ILoadBalancer $loadBalancer;
-	private NamespaceInfo $namespaceInfo;
-	private WikiPageFactory $wikiPageFactory;
 	private TemplateParser $templateParser;
 
 	public function __construct(
-		int $categoryLinkMigrationStage,
-		LinksMigration $linksMigration,
-		Language $contentLanguage,
-		ILoadBalancer $loadBalancer,
-		NamespaceInfo $namespaceInfo,
-		WikiPageFactory $wikiPageFactory
+		private readonly int $categoryLinkMigrationStage,
+		private readonly LinksMigration $linksMigration,
+		private readonly Language $contentLanguage,
+		private readonly ILoadBalancer $loadBalancer,
+		private readonly NamespaceInfo $namespaceInfo,
+		private readonly WikiPageFactory $wikiPageFactory,
 	) {
-		$this->categoryLinkMigrationStage = $categoryLinkMigrationStage;
-		$this->linksMigration = $linksMigration;
-		$this->contentLanguage = $contentLanguage;
-		$this->loadBalancer = $loadBalancer;
-		$this->namespaceInfo = $namespaceInfo;
-		$this->wikiPageFactory = $wikiPageFactory;
 		$this->templateParser = new TemplateParser( __DIR__ . '/../templates' );
 	}
 
